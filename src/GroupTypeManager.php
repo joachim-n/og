@@ -403,6 +403,31 @@ class GroupTypeManager {
     }
   }
 
+  public function setGroupMembershipType($entity_type_id, $bundle_id, $membership_type_id) {
+    $editable = $this->configFactory->getEditable('og.settings');
+    $group_membership_types = $editable->get('group_membership_types');
+
+    if (isset($membership_type_id)) {
+      $group_membership_types["$entity_type_id:$bundle_id"] = $membership_type_id;
+    }
+    else {
+      unset($group_membership_types["$entity_type_id:$bundle_id"]);
+    }
+
+    $editable->set('group_membership_types', $group_membership_types);
+    $editable->save();
+  }
+
+  public function getGroupMembershipType($entity_type_id, $bundle_id) {
+    $editable = $this->configFactory->getEditable('og.settings');
+    $group_membership_types = $editable->get('group_membership_types');
+    dsm("$entity_type_id:$bundle_id");
+    dsm($group_membership_types);
+    return $group_membership_types["$entity_type_id:$bundle_id"];
+  }
+
+
+
   /**
    * Resets all locally stored data.
    */
